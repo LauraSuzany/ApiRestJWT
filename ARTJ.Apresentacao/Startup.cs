@@ -24,6 +24,8 @@ namespace ARTJ.Apresentacao
         {
             //Validade do token e verificação da expiração do token
             var key = Encoding.ASCII.GetBytes(Settings.SecretKey);//Pegando os bits da string
+            services.AddHealthChecks();
+            services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ARTJ.Apresentacao", Version = "v1" });
@@ -38,15 +40,17 @@ namespace ARTJ.Apresentacao
                 x.RequireHttpsMetadata = false;//Basicamente estou dizendo que ele não precisa do HTTPS
                 x.SaveToken = true; //Pedir para salvar porém não persistir em nehum lugar pq não está configurado
                 x.TokenValidationParameters = new TokenValidationParameters
-                {//Aqui são os parametros que ele vai precisar para efetuar a validação do tokem
+                {//Aqui são os parametros que ele vai precisar para efetuar a validação do token
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
                     ValidateAudience = true,
                 };
             });
-            
-            }
+
+
+
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
