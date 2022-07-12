@@ -1,16 +1,12 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
 namespace ARTJ.Apresentacao
 {
@@ -26,13 +22,31 @@ namespace ARTJ.Apresentacao
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddControllers();
+            //Validade do token e verificação da expiração do token
+            var key = Encoding.ASCII.GetBytes(Settings.SecretKey);//Pegando os bits da string
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ARTJ.Apresentacao", Version = "v1" });
             });
-        }
+
+            services.AddAuthentication(x =>
+            {//Basicamente aqui está setado a configuração para procurar por um token, ver se o teken existe  
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;//Schema de altenticação que estamos utilizando || Bearer and JWT
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;//Basicamente estou dizendo que ele não precisa do HTTPS
+                x.SaveToken = true; //Pedir para salvar porém não persistir em nehum lugar pq não está configurado
+                x.TokenValidationParameters = new TokenValidationParameters
+                {//Aqui são os parametros que ele vai precisar para efetuar a validação do tokem
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = true,
+                };
+            });
+            
+            }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -47,6 +61,8 @@ namespace ARTJ.Apresentacao
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();//Tem que ser nessa ordem Authe e Autho
 
             app.UseAuthorization();
 

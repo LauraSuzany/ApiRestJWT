@@ -12,7 +12,7 @@ namespace ARTJ.Apresentacao.Repository
             var users = new List<Model.User>
             {
                 new Model.User {Id = 1, UserName = "Laura", Password = "124", Role = "manager"},
-                new Model.User {Id = 2, UserName = "Suzany", Password = "123", Role = "employee"}
+                new Model.User {Id = 2, UserName = "Suzany", Password = "123", Role = "employee"}//Role =permissões
         };
             return (Model.User)users.FirstOrDefault(x => x.UserName.ToLower() == userName.ToLower() && x.Password == password);
         }
