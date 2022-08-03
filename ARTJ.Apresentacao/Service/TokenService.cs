@@ -20,7 +20,8 @@ namespace ARTJ.Apresentacao.Service
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim(ClaimTypes.Name, user.UserName.ToString()),//User.Idetity.Nome(Basicamente verificar spnet)
-                    new Claim(ClaimTypes.Role, user.Role.ToString())//
+                    new Claim(ClaimTypes.Role, user.Role.ToString()),//
+                    new Claim(ClaimTypes.UserData, user.data.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddHours(8), //Passou dessa hora tem que fazer um processo de refresh token
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature) //Credencias usadas para cirptar e desincliptar o token 
