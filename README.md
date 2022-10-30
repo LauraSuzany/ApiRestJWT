@@ -10,7 +10,7 @@
 ![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
 ![Imagem meramente ilustrativa](https://supertokens.com/static/b0172cabbcd583dd4ed222bdb83fc51a/9af93/jwt-structure.png)
 
-O obejtivo dessa programa: É gerar tokens jwt
+O obejtivo dessa programa: Gerar tokens jwt
 
 ✍ "Every day is a learning Day" business: L.M code e Tecnologia
 </div>
